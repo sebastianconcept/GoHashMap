@@ -4,36 +4,32 @@ package main
 #include<stdbool.h>
 */
 import "C"
-import (
-	"github.com/cornelk/hashmap"
-)
 
-var defaultSize uintptr = 50
-var storage = hashmap.New(defaultSize)
+var storage = make(map[string]string)
 
 //export reset
 func reset() {
-	storage = hashmap.New(defaultSize)
+	storage = make(map[string]string)
 }
 
 //export size
 func size() C.uint {
-	return C.uint(storage.Len())
+	return C.uint(len(storage))
 }
 
 //export includes
 func includes(key *C.char) C.bool {
 	var localKey = C.GoString(key)
-	var _, ok = storage.Get(localKey)
+	var _, ok = storage[localKey]
 	return C.bool(ok)
 }
 
 //export get
 func get(key *C.char) *C.char {
 	var localKey = C.GoString(key)
-	var found, ok = storage.Get(localKey)
+	var found, ok = storage[localKey]
 	if ok {
-		return C.CString(found.(string))
+		return C.CString(found)
 	} else {
 		return nil
 	}
@@ -43,14 +39,14 @@ func get(key *C.char) *C.char {
 func set(k *C.char, v *C.char) *C.char {
 	var local_key = C.GoString(k)
 	var local_value = C.GoString(v)
-	storage.Set(local_key, local_value)
+	storage[local_key] = local_value
 	return k
 }
 
 //export remove
 func remove(k *C.char) {
 	var local_key = C.GoString(k)
-	storage.Del(local_key)
+	delete(storage, local_key)
 }
 
 func main() {
