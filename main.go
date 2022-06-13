@@ -1,5 +1,8 @@
 package main
 
+/*
+#include<stdbool.h>
+*/
 import "C"
 import (
 	"github.com/cornelk/hashmap"
@@ -15,12 +18,12 @@ func size() C.uint {
 }
 
 //export includes
-// func includes(key *C.char) *C.bool {
-// 	var localKey = C.GoString(key)
-// 	// var _, ok = store[localKey]
-// 	var _, ok = storage.Get(localKey)
-// 	return C.CBOOL(ok)
-// }
+func includes(key *C.char) C.bool {
+	var localKey = C.GoString(key)
+	// var _, ok = store[localKey]
+	var _, ok = storage.Get(localKey)
+	return C.bool(ok)
+}
 
 //export get
 func get(key *C.char) *C.char {
