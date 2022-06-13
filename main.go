@@ -9,7 +9,13 @@ import (
 )
 
 // var store = make(map[string]string)
-var storage = &hashmap.HashMap{}
+var defaultSize uintptr = 50
+var storage = hashmap.New(defaultSize)
+
+//export reset
+func reset() {
+	storage = hashmap.New(defaultSize)
+}
 
 //export size
 func size() C.uint {
@@ -54,5 +60,5 @@ func remove(k *C.char) {
 }
 
 func main() {
-
+	reset()
 }
